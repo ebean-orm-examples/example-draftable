@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>example-draftable</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.avaje.ebeanorm</groupId>
+      <artifactId>avaje-ebeanorm</artifactId>
+      <version>6.11.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.avaje.composite</groupId>
+      <artifactId>avaje-composite-testing-ebean</artifactId>
+      <version>4.1</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+  <!-- Enhance the meta beans -->
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.avaje.ebeanorm</groupId>
+        <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
+        <version>4.7.1</version>
+        <executions>
+          <!--   Not going to enhance Model bean -->
+          <execution>
+            <id>main</id>
+            <phase>process-classes</phase>
+            <configuration>
+              <classSource>target/classes</classSource>
+              <packages>org.example.draftable.domain</packages>
+              <transformArgs>debug=1</transformArgs>
+            </configuration>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+
+</project>
