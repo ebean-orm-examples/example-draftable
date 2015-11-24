@@ -4,7 +4,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import org.junit.Test;
 
-import java.util.List;
+import java.sql.Timestamp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,17 +22,27 @@ public class DocLinkTest {
   @Test
   public void testDirtyState() {
 
+    Timestamp when = new Timestamp(System.currentTimeMillis());
+    String comment = "Really interesting";
+
     Link link1 = new Link("Ls1");
+    link1.setComment(comment);
+    link1.setWhenPublish(when);
     link1.save();
 
     Link draft1 = Ebean.find(Link.class).setId(link1.getId()).asDraft().findUnique();
     assertThat(draft1.isDirty()).isTrue();
 
     EbeanServer server = Ebean.getDefaultServer();
-    server.publish(Link.class, link1.getId(), null);
+
+    Link linkLive = server.publish(Link.class, link1.getId(), null);
+    assertThat(linkLive.getComment()).isEqualTo(comment);
+    assertThat(linkLive.getWhenPublish()).isEqualTo(when);
 
     Link draft1b = Ebean.find(Link.class).setId(link1.getId()).asDraft().findUnique();
     assertThat(draft1b.isDirty()).isFalse();
+    assertThat(draft1b.getComment()).isNull();
+    assertThat(draft1b.getWhenPublish()).isNull();
 
   }
 

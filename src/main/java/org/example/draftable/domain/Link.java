@@ -1,10 +1,12 @@
 package org.example.draftable.domain;
 
 import com.avaje.ebean.annotation.DraftDirty;
+import com.avaje.ebean.annotation.DraftReset;
 import com.avaje.ebean.annotation.Draftable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -15,6 +17,18 @@ public class Link extends BaseDomain {
   String name;
 
   String location;
+
+  /**
+   * Draft reset to null on publish.
+   */
+  @DraftReset
+  Timestamp whenPublish;
+
+  /**
+   * Draft reset to null on publish.
+   */
+  @DraftReset
+  String comment;
 
   @DraftDirty
   boolean dirty;
@@ -56,5 +70,21 @@ public class Link extends BaseDomain {
 
   public void setDirty(boolean dirty) {
     this.dirty = dirty;
+  }
+
+  public Timestamp getWhenPublish() {
+    return whenPublish;
+  }
+
+  public void setWhenPublish(Timestamp whenPublish) {
+    this.whenPublish = whenPublish;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 }
