@@ -13,12 +13,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DocLinkTest {
 
   @Test
-  public void testDelete() {
+  public void testDelete_whenNotPublished() {
 
     Link link1 = new Link("Ld1");
     link1.save();
 
     Ebean.delete(link1);
+  }
+
+  @Test
+  public void testDelete_whenPublished() {
+
+    Link link1 = new Link("Ld2");
+    link1.save();
+    EbeanServer server = Ebean.getDefaultServer();
+    server.publish(Link.class, link1.getId());
+
+    link1 = Ebean.find(Link.class).setId(link1.getId()).asDraft().findUnique();
+    link1.delete();
+
+    Link live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
+    assertThat(live).isNull();
   }
 
   @Test
@@ -93,6 +108,8 @@ public class DocLinkTest {
     assertThat(liveDoc2.getLinks()).hasSize(2);
     assertThat(liveDoc2.getLinks()).extracting("id").contains(link2.getId(), link3.getId());
 
+    // delete the draft and live beans (with associated children)
+    draftDoc1.delete();
   }
 
 
