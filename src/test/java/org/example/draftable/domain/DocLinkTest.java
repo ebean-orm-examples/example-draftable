@@ -2,9 +2,11 @@ package org.example.draftable.domain;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Query;
 import org.junit.Test;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,4 +96,64 @@ public class DocLinkTest {
   }
 
 
+  @Test
+  public void testDraftRestore() {
+
+    Link link1 = new Link("Ldr1");
+    link1.setLocation("firstLocation");
+    link1.save();
+
+    EbeanServer server = Ebean.getDefaultServer();
+
+    server.publish(Link.class, link1.getId(), null);
+
+    Link draftLink = Ebean.find(Link.class)
+        .setId(link1.getId())
+        .asDraft()
+        .findUnique();
+
+    draftLink.setLocation("secondLocation");
+    draftLink.save();
+
+    server.draftRestore(Link.class, link1.getId(), null);
+
+    draftLink = Ebean.find(Link.class)
+        .setId(link1.getId())
+        .asDraft()
+        .findUnique();
+
+    assertThat(draftLink.getLocation()).isEqualTo("firstLocation");
+
+  }
+
+  @Test
+  public void testDraftRestoreViaQuery() {
+
+    Link link1 = new Link("Ldr1");
+    link1.setLocation("firstLocation");
+    link1.setComment("Banana");
+    link1.save();
+
+    EbeanServer server = Ebean.getDefaultServer();
+
+    server.publish(Link.class, link1.getId(), null);
+
+    Link draftLink = Ebean.find(Link.class)
+        .setId(link1.getId())
+        .asDraft()
+        .findUnique();
+
+    draftLink.setLocation("secondLocation");
+    draftLink.setComment("A good change");
+    draftLink.save();
+
+    Query<Link> query = server.find(Link.class).where().eq("id", link1.getId()).query();
+    List<Link> links = server.draftRestore(query);
+
+    assertThat(links).hasSize(1);
+    assertThat(links.get(0).getLocation()).isEqualTo("firstLocation");
+    assertThat(links.get(0).isDirty()).isEqualTo(false);
+    assertThat(links.get(0).getComment()).isNull();
+
+  }
 }
