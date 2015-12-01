@@ -2,9 +2,7 @@ package org.example.draftable.domain;
 
 import com.avaje.ebean.annotation.DraftOnly;
 import com.avaje.ebean.annotation.Draftable;
-import com.avaje.ebean.annotation.PrivateOwned;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -17,6 +15,7 @@ import java.util.List;
 @Entity
 public class Document extends BaseDomain {
 
+  @Column(unique = true)
   String title;
 
   String body;
