@@ -3,6 +3,7 @@ package org.example.draftable.domain;
 import com.avaje.ebean.annotation.DraftDirty;
 import com.avaje.ebean.annotation.DraftReset;
 import com.avaje.ebean.annotation.Draftable;
+import com.avaje.ebean.annotation.SoftDelete;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -13,6 +14,9 @@ import java.util.List;
 @Draftable
 @Entity
 public class Link extends BaseDomain {
+
+  @SoftDelete
+  boolean deleted;
 
   String name;
 
@@ -38,6 +42,14 @@ public class Link extends BaseDomain {
 
   public Link(String name) {
     this.name = name;
+  }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
   public String getName() {

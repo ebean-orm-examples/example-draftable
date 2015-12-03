@@ -21,6 +21,18 @@ public class DocLinkTest {
     Ebean.delete(link1);
   }
 
+
+  @Test
+  public void testDeletePermanent_whenPublished2() {
+
+    Link link1 = new Link("Ld2");
+    link1.save();
+    Ebean.getDefaultServer().publish(Link.class, link1.getId());
+
+    Link link = Ebean.find(Link.class).setId(link1.getId()).asDraft().findUnique();
+    Ebean.deletePermanent(link);
+  }
+
   @Test
   public void testDelete_whenPublished() {
 
@@ -33,6 +45,11 @@ public class DocLinkTest {
     link1.delete();
 
     Link live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
+    assertThat(live).isNotNull();
+
+    server.deletePermanent(link1);
+
+    live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
     assertThat(live).isNull();
   }
 
