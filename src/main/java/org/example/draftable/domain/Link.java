@@ -3,6 +3,7 @@ package org.example.draftable.domain;
 import com.avaje.ebean.annotation.DraftDirty;
 import com.avaje.ebean.annotation.DraftReset;
 import com.avaje.ebean.annotation.Draftable;
+import com.avaje.ebean.annotation.History;
 import com.avaje.ebean.annotation.SoftDelete;
 
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 
+@History
 @Draftable
 @Entity
 public class Link extends BaseDomain {

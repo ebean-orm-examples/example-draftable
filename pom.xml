@@ -13,7 +13,14 @@
     <dependency>
       <groupId>org.avaje.ebeanorm</groupId>
       <artifactId>avaje-ebeanorm</artifactId>
-      <version>6.13.1</version>
+      <version>6.13.2-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.4-1202-jdbc41</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
