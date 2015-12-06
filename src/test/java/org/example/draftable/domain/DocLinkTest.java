@@ -5,10 +5,12 @@ import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
 import org.junit.Test;
 
+import javax.persistence.PersistenceException;
 import java.sql.Timestamp;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class DocLinkTest {
 
@@ -57,6 +59,26 @@ public class DocLinkTest {
 
     live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
     assertThat(live).isNull();
+  }
+
+  @Test
+  public void testUpdateLive_throwsException() {
+
+    Link link1 = new Link("forUpdateLive");
+    link1.save();
+
+    Link live = Ebean.getDefaultServer().publish(Link.class, link1.getId());
+
+    live.setComment("foo");
+    // Expect a nice
+    try {
+      live.save();
+      assertTrue("Never get here",false);
+
+    } catch (PersistenceException e) {
+      // we want to assert the message is nice and meaningful (and not a optimistic locking exception etc)
+      assertThat(e.getMessage()).contains("Save or update is not allowed on a 'live' bean - only draft beans");
+    }
   }
 
   @Test
