@@ -42,11 +42,17 @@ public class DocLinkTest {
     server.publish(Link.class, link1.getId());
 
     link1 = Ebean.find(Link.class).setId(link1.getId()).asDraft().findUnique();
+    assertThat(link1.isDraft()).isTrue();
+
+    // this is a soft delete (no automatic publish here, only updates draft)
     link1.delete();
 
     Link live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
     assertThat(live).isNotNull();
+    assertThat(live.isDraft()).isFalse();
+    assertThat(live.isDeleted()).isFalse(); // soft delete state not published yet
 
+    // this is a permanent delete (effectively has automatic publish)
     server.deletePermanent(link1);
 
     live = Ebean.find(Link.class).setId(link1.getId()).findUnique();
@@ -139,7 +145,8 @@ public class DocLinkTest {
 
     EbeanServer server = Ebean.getDefaultServer();
 
-    server.publish(Link.class, link1.getId(), null);
+    Link live = server.publish(Link.class, link1.getId(), null);
+    assertThat(live.isDraft()).isFalse();
 
     Link draftLink = Ebean.find(Link.class)
         .setId(link1.getId())

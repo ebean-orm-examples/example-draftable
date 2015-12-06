@@ -1,5 +1,6 @@
 package org.example.draftable.domain;
 
+import com.avaje.ebean.annotation.Draft;
 import com.avaje.ebean.annotation.DraftDirty;
 import com.avaje.ebean.annotation.DraftReset;
 import com.avaje.ebean.annotation.Draftable;
@@ -36,6 +37,16 @@ public class Link extends BaseDomain {
   @DraftReset
   String comment;
 
+  /**
+   * Indicates if the instance is a 'draft' or 'live' bean.
+   */
+  @Draft
+  boolean draft;
+
+  /**
+   * Indicates if the draft has modifications that have not been published
+   * to 'live'. This is automatically set when a draft is saved.
+   */
   @DraftDirty
   boolean dirty;
 
@@ -44,6 +55,14 @@ public class Link extends BaseDomain {
 
   public Link(String name) {
     this.name = name;
+  }
+
+  public boolean isDraft() {
+    return draft;
+  }
+
+  public void setDraft(boolean draft) {
+    this.draft = draft;
   }
 
   public boolean isDeleted() {
