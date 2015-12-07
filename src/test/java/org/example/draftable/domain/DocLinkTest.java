@@ -36,6 +36,24 @@ public class DocLinkTest {
   }
 
   @Test
+  public void testDeleteLivePermanent_throwsException() {
+
+    Link link1 = new Link("Ld2");
+    link1.save();
+
+    Link live = Ebean.getDefaultServer().publish(Link.class, link1.getId());
+
+    try {
+      Ebean.deletePermanent(live);
+      assertTrue("never get here",false);
+
+    } catch (PersistenceException e) {
+      // assert nice message when trying to delete live bean
+      assertThat(e.getMessage().contains("Explicit Delete is not allowed on a 'live' bean - only draft beans"));
+    }
+  }
+
+  @Test
   public void testDelete_whenPublished() {
 
     Link link1 = new Link("Ld2");
