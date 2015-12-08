@@ -18,6 +18,12 @@ public class DocLinkTest {
   public void testDelete_whenNotPublished() {
 
     Link link1 = new Link("Ld1");
+    assertThat(link1.isDraft()).isFalse();
+
+    link1.save();
+    assertThat(link1.isDraft()).isTrue();
+
+    link1.setComment("some change");
     link1.save();
 
     Ebean.delete(link1);
