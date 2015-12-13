@@ -57,6 +57,9 @@ public class Link extends BaseDomain {
     this.name = name;
   }
 
+  public Link() {
+  }
+
   public boolean isDraft() {
     return draft;
   }

@@ -15,6 +15,25 @@ import static org.junit.Assert.assertTrue;
 public class DocLinkTest {
 
   @Test
+  public void testUpdate_whenNotPublished() {
+
+    Link link1 = new Link("update");
+    assertThat(link1.isDraft()).isFalse();
+
+    link1.save();
+    assertThat(link1.isDraft()).isTrue();
+
+    // perform stateless update
+    Link linkUpdate = new Link();
+    linkUpdate.setId(link1.getId());
+    linkUpdate.setComment("stateless update");
+    linkUpdate.setDraft(true);
+    linkUpdate.update();
+
+    Ebean.deletePermanent(linkUpdate);
+  }
+
+  @Test
   public void testDelete_whenNotPublished() {
 
     Link link1 = new Link("Ld1");
