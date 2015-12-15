@@ -30,6 +30,10 @@ public class DocLinkTest {
     linkUpdate.setDraft(true);
     linkUpdate.update();
 
+    // invoke lazy loading on the updated bean
+    // automatically set asDraft() on lazy loading query
+    linkUpdate.getLocation();
+
     Ebean.deletePermanent(linkUpdate);
   }
 
