@@ -29,8 +29,7 @@ public class Document extends BaseDomain {
   /**
    * Relationship to draftable elements.
    */
-  //@PrivateOwned
-  @OneToMany(mappedBy = "document")//, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "document")
   List<DocumentMedia> media;
 
   public String getTitle() {
