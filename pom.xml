@@ -12,8 +12,21 @@
 
     <dependency>
       <groupId>org.avaje.ebeanorm</groupId>
+      <artifactId>querybean-generator</artifactId>
+      <version>2.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.avaje.ebeanorm</groupId>
+      <artifactId>avaje-ebeanorm-querybean</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.avaje.ebeanorm</groupId>
       <artifactId>avaje-ebeanorm</artifactId>
-      <version>6.13.3-SNAPSHOT</version>
+      <version>6.13.5</version>
     </dependency>
 
     <dependency>
@@ -39,6 +52,16 @@
     <plugins>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>org.avaje.ebeanorm</groupId>
         <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
         <version>4.7.1</version>
@@ -51,6 +74,35 @@
               <classSource>target/classes</classSource>
               <packages>org.example.draftable.domain</packages>
               <transformArgs>debug=1</transformArgs>
+            </configuration>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.avaje.ebeanorm</groupId>
+        <artifactId>querybean-maven-plugin</artifactId>
+        <version>2.1.1</version>
+        <executions>
+          <execution>
+            <id>main</id>
+            <phase>process-classes</phase>
+            <configuration>
+              <transformArgs>debug=2</transformArgs>
+            </configuration>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test</id>
+            <phase>process-test-classes</phase>
+            <configuration>
+              <classSource>target/test-classes</classSource>
+              <transformArgs>debug=2</transformArgs>
             </configuration>
             <goals>
               <goal>enhance</goal>

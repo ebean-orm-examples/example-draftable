@@ -3,6 +3,7 @@ package org.example.draftable.domain;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
+import org.example.draftable.domain.query.QDocument;
 import org.junit.Test;
 
 import javax.persistence.PersistenceException;
@@ -13,6 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class DocLinkTest {
+
+  @Test
+  public void testQuery() {
+
+    new QDocument()
+        .title.icontains("jimmy")
+        .id.greaterThan(1)
+        .findList();
+  }
 
   @Test
   public void testUpdate_whenNotPublished() {

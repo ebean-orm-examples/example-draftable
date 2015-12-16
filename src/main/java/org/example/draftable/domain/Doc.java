@@ -1,11 +1,13 @@
 package org.example.draftable.domain;
 
+import com.avaje.ebean.annotation.DbJson;
 import com.avaje.ebean.annotation.Draftable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.util.List;
+import java.util.Map;
 
 
 @Draftable
@@ -16,6 +18,9 @@ public class Doc extends BaseDomain {
 
   @ManyToMany(cascade = CascadeType.ALL)
   List<Link> links;
+
+  @DbJson
+  Map<String,Object> content;
 
   public Doc(String name) {
     this.name = name;
@@ -35,5 +40,13 @@ public class Doc extends BaseDomain {
 
   public void setLinks(List<Link> links) {
     this.links = links;
+  }
+
+  public Map<String, Object> getContent() {
+    return content;
+  }
+
+  public void setContent(Map<String, Object> content) {
+    this.content = content;
   }
 }
