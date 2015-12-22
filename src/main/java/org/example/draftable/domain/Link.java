@@ -10,6 +10,7 @@ import com.avaje.ebean.annotation.SoftDelete;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,7 +52,7 @@ public class Link extends BaseDomain {
   boolean dirty;
 
   @ManyToMany(mappedBy = "links")
-  List<Doc> docs;
+  List<Doc> docs = new ArrayList<>();
 
   public Link(String name) {
     this.name = name;
