@@ -2,6 +2,7 @@ package org.example.draftable.domain;
 
 import com.avaje.ebean.annotation.DraftOnly;
 import com.avaje.ebean.annotation.Draftable;
+import com.avaje.ebean.annotation.History;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.List;
 
-
+@History
 @Draftable
 @Entity
 public class Document extends BaseDomain {
